@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class ChatManager : NetworkBehaviour  {
+public class ChatManager : MonoBehaviour  {
 
     public string username;
 
@@ -44,6 +44,7 @@ public class ChatManager : NetworkBehaviour  {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SendMessageToChat("Pressed space", Message.MessageType.info);
+                Debug.Log("Space");
             }
         }
 	}
