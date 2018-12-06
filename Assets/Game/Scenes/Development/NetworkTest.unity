@@ -732,7 +732,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967245
   m_RenderingPath: 0
-  m_TargetTexture: {fileID: 8400000, guid: 62f61fbabc688aa499d8d617f623b0b8, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -2023,7 +2023,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shaderInstance: {fileID: 2100000, guid: 14d4c8138a1ff1b4a9e217f7d7b8a8f6, type: 2}
   mixWithDepth: {fileID: 2100000, guid: 60593255800d26c46bf5743d7ad48817, type: 2}
-  firstPassTexture: {fileID: 8400000, guid: 62f61fbabc688aa499d8d617f623b0b8, type: 2}
 --- !u!81 &2119048362
 AudioListener:
   m_ObjectHideFlags: 0
