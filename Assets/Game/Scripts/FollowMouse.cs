@@ -18,6 +18,7 @@ public class FollowMouse : MonoBehaviour
     {
         var deltaMouse = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         look += Vector2.Scale(deltaMouse * Time.deltaTime, sensitivity);
+        look.y = Mathf.Clamp(look.y, -90, 90);
 
         var pitch = Quaternion.Euler(-look.y, 0, 0);
         var yaw = Quaternion.Euler(0, look.x, 0);
