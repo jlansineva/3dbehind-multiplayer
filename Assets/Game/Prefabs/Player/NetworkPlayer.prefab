@@ -1007,7 +1007,13 @@ MonoBehaviour:
   speed: 10
   rotationSpeed: 100
   forceConst: 1
+  teleportHeightTolerance: 2
+  teleportRange: 15
+  teleportSpeed: 50
+  trans: {fileID: 0}
   anim: {fileID: 0}
+  targetingPrefab: {fileID: 1155622511169094, guid: a266e83aff2adf74fa7080b5ecfda495,
+    type: 2}
   score: 0
 --- !u!114 &114826027874707496
 MonoBehaviour:
