@@ -22,8 +22,18 @@ public class PlayerControl : NetworkBehaviour {
     [SyncVar]
     private bool teleporting = false;
 
+    [SyncVar]
+    private bool moving = false;
+
+    [SyncVar]
+    private bool jumping = false;
+
     void Start()
     {
+        boi = transform.Find("boi10");
+
+        Debug.Log(boi);
+
         if (isLocalPlayer)
         {
             var camera = GameObject.Find("CameraHolder");
@@ -32,13 +42,14 @@ public class PlayerControl : NetworkBehaviour {
             camera.transform.localRotation = new Quaternion();
             trans = camera.transform;
 
-            boi = transform.Find("boi10");
             var characterRenderer = boi.transform.Find("Cube").GetComponent<Renderer>();
             characterRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
         }
 
         selfRigidbody = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
+        anim = boi.GetComponent<Animator>();
+
+        Debug.Log(anim);
     }
 
     void FixedUpdate()
@@ -49,13 +60,22 @@ public class PlayerControl : NetworkBehaviour {
     }
 
     void Update() {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer)
+        {
+            anim.SetBool("moving", moving);
+            anim.SetBool("teleporting", teleporting);
+            anim.SetBool("jumping", jumping);
+            return;
+        }
 
         if (Input.GetAxis("Jump") > 0 && selfRigidbody.position.y < 1)
         {
             // TODO: should get rid of the rigidbody physics
             selfRigidbody.AddForce(0, forceConst, 0, ForceMode.Impulse);
+            jumping = true;
         }
+
+        jumping = selfRigidbody.position.y > 1 ? true : false;
 
         float translationX = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         float translationY = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
@@ -64,6 +84,10 @@ public class PlayerControl : NetworkBehaviour {
         // Move Y rotation to root
         boi.rotation = Quaternion.Euler(0, trans.rotation.eulerAngles.y, 0);
         translation = trans.rotation * translation;
+
+        moving = translation.magnitude > 0 ? true : false;
+
+        
 
         //float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
         //rotation *= Time.deltaTime;
