@@ -1014,6 +1014,8 @@ MonoBehaviour:
   anim: {fileID: 0}
   targetingPrefab: {fileID: 1155622511169094, guid: a266e83aff2adf74fa7080b5ecfda495,
     type: 2}
+  teleportParticlePrefab: {fileID: 1145632469793016, guid: b59b1b89331724c48acf1dbbda85d13e,
+    type: 2}
   score: 0
 --- !u!114 &114826027874707496
 MonoBehaviour:

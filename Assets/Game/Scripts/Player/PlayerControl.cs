@@ -17,6 +17,7 @@ public class PlayerControl : NetworkBehaviour {
     public Transform trans;
     public Animator anim;
     public GameObject targetingPrefab;
+    public GameObject teleportParticlePrefab;
 
     private Rigidbody selfRigidbody;
     private Transform boi;
@@ -104,6 +105,7 @@ public class PlayerControl : NetworkBehaviour {
 
         if (teleportActive)
         {
+            CmdTeleportDone(transform.position);
             transform.position = teleportPositions.First();
             teleportPositions.RemoveAt(0);
             if (teleportPositions.Count == 0)
@@ -234,7 +236,7 @@ public class PlayerControl : NetworkBehaviour {
                 foreach (var player in otherPlayerWithinRange)
                 {
                     score += 1;
-                    player.RpcDead(gameObject);
+                    player.RpcDead();
                 }
             }
         }
@@ -256,11 +258,17 @@ public class PlayerControl : NetworkBehaviour {
         attackDirection = new Ray(transform.position, transform.forward);
     }
 
+    [Command]
+    private void CmdTeleportDone(Vector3 pos)
+    {
+        RpcTeleportDone(pos);
+    }
+
     /// <summary>
     /// This is called on client after this player dies
     /// </summary>
     [ClientRpc]
-    public void RpcDead(GameObject player)
+    public void RpcDead()
     {
         //anim.SetTrigger("");
 
@@ -268,6 +276,19 @@ public class PlayerControl : NetworkBehaviour {
         var randomizedSpawn = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
         transform.position = randomizedSpawn.transform.position;
         selfRigidbody.velocity = Vector3.zero;
+    }
+
+    [ClientRpc]
+    public void RpcTeleportDone(Vector3 pos)
+    {
+        StartCoroutine(PlayTeleportEffect(pos));
+    }
+
+    IEnumerator PlayTeleportEffect(Vector3 pos)
+    {
+        var effect = Instantiate(teleportParticlePrefab, pos, Quaternion.Euler(-90, 0, 0));
+        yield return new WaitForSeconds(1);
+        Destroy(effect);
     }
 
     Vector3 GetTeleportEndPoint()
