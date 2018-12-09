@@ -18,6 +18,7 @@ public class PlayerControl : NetworkBehaviour {
     public Animator anim;
     public GameObject targetingPrefab;
     public GameObject teleportParticlePrefab;
+    public GameObject bloodPrefab;
 
     private Rigidbody selfRigidbody;
     private Transform boi;
@@ -231,7 +232,7 @@ public class PlayerControl : NetworkBehaviour {
                 var otherPlayers = GetOtherPlayers();
                 var impactPoint = attackDirection.origin + attackDirection.direction.normalized * 0.4f;
                 var otherPlayerWithinRange = otherPlayers
-                    .Where(it => IsWithingRange(it.transform.position, impactPoint, 1.5f));
+                    .Where(it => IsWithingRange(it.transform.position, impactPoint, 2.5f));
 
                 foreach (var player in otherPlayerWithinRange)
                 {
@@ -254,7 +255,7 @@ public class PlayerControl : NetworkBehaviour {
     [Command]
     private void CmdAttack()
     {
-        attackTimer = 0.4f;
+        attackTimer = 0.2f;
         attackDirection = new Ray(transform.position, transform.forward);
     }
 
@@ -272,10 +273,24 @@ public class PlayerControl : NetworkBehaviour {
     {
         //anim.SetTrigger("");
 
+        for (int i = 0; i < 14; i++)
+        {
+            var momentum = Vector3.Scale(UnityEngine.Random.insideUnitSphere, new Vector3(1.5f, 6f, 1.5f));
+            CreateBlood(UnityEngine.Random.Range(0.04f, 0.4f), momentum);
+        }
+
         var spawnPoints = FindObjectsOfType<NetworkStartPosition>();
         var randomizedSpawn = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
         transform.position = randomizedSpawn.transform.position;
         selfRigidbody.velocity = Vector3.zero;
+    }
+
+    void CreateBlood(float size, Vector3 momentum)
+    {
+        var blood = Instantiate(bloodPrefab, transform.position, Quaternion.identity);
+        blood.transform.localScale = Vector3.one * size;
+        blood.transform.position += momentum * .1f + Vector3.up * .2f;
+        blood.GetComponent<Rigidbody>().AddForce(momentum, ForceMode.Impulse);
     }
 
     [ClientRpc]

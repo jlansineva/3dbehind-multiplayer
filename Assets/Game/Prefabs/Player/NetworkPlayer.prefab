@@ -1016,6 +1016,8 @@ MonoBehaviour:
     type: 2}
   teleportParticlePrefab: {fileID: 1145632469793016, guid: b59b1b89331724c48acf1dbbda85d13e,
     type: 2}
+  bloodPrefab: {fileID: 1722742217252636, guid: 18e03f304cd061540bec683676b5d5fa,
+    type: 2}
   score: 0
 --- !u!114 &114826027874707496
 MonoBehaviour:
