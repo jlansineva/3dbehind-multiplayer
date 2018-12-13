@@ -16,20 +16,15 @@ public class PlayerControl : NetworkBehaviour {
     private Transform trans;
     private Transform boi;
 
+    private PlayerState state;
+
     [SyncVar]
     private int teleportCalc = 0;
 
-    [SyncVar]
-    private bool teleporting = false;
-
-    [SyncVar]
-    private bool moving = false;
-
-    [SyncVar]
-    private bool jumping = false;
-
     void Start()
     {
+        state = GetComponent<PlayerState>();
+
         boi = transform.Find("boi10");
 
         Debug.Log(boi);
@@ -62,9 +57,6 @@ public class PlayerControl : NetworkBehaviour {
     void Update() {
         if (!isLocalPlayer)
         {
-            anim.SetBool("moving", moving);
-            anim.SetBool("teleporting", teleporting);
-            anim.SetBool("jumping", jumping);
             return;
         }
 
@@ -72,10 +64,10 @@ public class PlayerControl : NetworkBehaviour {
         {
             // TODO: should get rid of the rigidbody physics
             selfRigidbody.AddForce(0, forceConst, 0, ForceMode.Impulse);
-            jumping = true;
+            state.CmdUpdateState("jumping", true);
         }
 
-        jumping = selfRigidbody.position.y > 1 ? true : false;
+        state.CmdUpdateState("jumping", selfRigidbody.position.y > 1 ? true : false);
 
         float translationX = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         float translationY = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
@@ -85,7 +77,7 @@ public class PlayerControl : NetworkBehaviour {
         boi.rotation = Quaternion.Euler(0, trans.rotation.eulerAngles.y, 0);
         translation = trans.rotation * translation;
 
-        moving = translation.magnitude > 0 ? true : false;
+        state.CmdUpdateState("moving", translation.magnitude > 0 ? true : false);
 
         
 
@@ -95,12 +87,12 @@ public class PlayerControl : NetworkBehaviour {
         transform.Translate(translation);
         //transform.Rotate(0, rotation, 0);
 
-        if (teleporting == true)
+        if (state.GetState("teleporting") == true)
         {
             if (teleportCalc == 10)
             {
                 teleportCalc = 0;
-                teleporting = false;
+                state.CmdUpdateState("teleporting", false);
                 selfRigidbody.velocity = Vector3.zero;
             }
             else
@@ -125,7 +117,7 @@ public class PlayerControl : NetworkBehaviour {
 
         if (Input.GetMouseButtonDown(2))
         {
-            teleporting = true;
+            state.CmdUpdateState("teleporting", true);
         }
     }
 }
