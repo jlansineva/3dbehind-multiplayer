@@ -47,9 +47,13 @@ public class PlayerControl : NetworkBehaviour {
     [SyncVar]
     [SerializeField]
     private int score = 0;
+    private PlayerState state;
 
     void Start()
     {
+        state = GetComponent<PlayerState>();
+        boi = transform.Find("boi10");
+
         if (isLocalPlayer)
         {
             var camera = GameObject.Find("CameraHolder");
@@ -58,12 +62,12 @@ public class PlayerControl : NetworkBehaviour {
             camera.transform.localRotation = new Quaternion();
             trans = camera.transform;
 
-            boi = transform.Find("boi10");
             var characterRenderer = boi.transform.Find("Cube").GetComponent<Renderer>();
             characterRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
         }
 
         selfRigidbody = GetComponent<Rigidbody>();
+
         anim = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
         distToGround = playerCollider.bounds.extents.y;
@@ -79,6 +83,7 @@ public class PlayerControl : NetworkBehaviour {
         {
             // TODO: should get rid of the rigidbody physics
             selfRigidbody.AddForce(0, forceConst, 0, ForceMode.Impulse);
+            state.CmdUpdateState("jumping", true);
         }
 
         if (teleporting == true)
@@ -148,7 +153,10 @@ public class PlayerControl : NetworkBehaviour {
         transform.Translate(translation);
 
         // Move Y rotation to root
-        boi.rotation = Quaternion.Euler(0, trans.rotation.eulerAngles.y, 0);       
+        boi.rotation = Quaternion.Euler(0, trans.rotation.eulerAngles.y, 0);
+
+        state.CmdUpdateState("jumping", selfRigidbody.position.y > 1 ? true : false);
+        state.CmdUpdateState("moving", translation.magnitude > 0 ? true : false);
 
         if (!teleportActive)
         {
@@ -168,6 +176,7 @@ public class PlayerControl : NetworkBehaviour {
             {
                 teleporting = true;
                 teleportTargeting = false;
+                state.CmdUpdateState("teleporting", true);
             }
 
             if (Input.GetKeyDown(KeyCode.E))
