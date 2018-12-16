@@ -48,6 +48,7 @@ public class PlayerControl : NetworkBehaviour {
     [SerializeField]
     private int score = 0;
     private PlayerState state;
+    private float teleportTimer = 0;
 
     void Start()
     {
@@ -176,12 +177,23 @@ public class PlayerControl : NetworkBehaviour {
             {
                 teleporting = true;
                 teleportTargeting = false;
+                teleportTimer = 0.5f;
                 state.CmdUpdateState("teleporting", true);
             }
 
             if (Input.GetKeyDown(KeyCode.E))
             {
                 teleportTargeting = !teleportTargeting;
+            }
+        }
+
+        if (teleportTimer > 0)
+        {
+            teleportTimer -= Time.deltaTime;
+
+            if (teleportTimer <= 0)
+            {
+                state.CmdUpdateState("teleporting", false);
             }
         }
     }
