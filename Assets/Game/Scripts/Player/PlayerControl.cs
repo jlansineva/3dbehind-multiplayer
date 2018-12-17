@@ -87,6 +87,10 @@ public class PlayerControl : NetworkBehaviour {
             selfRigidbody.AddForce(0, forceConst, 0, ForceMode.Impulse);
             state.CmdUpdateState("jumping", true);
         }
+        else if (isGrounded)
+        {
+            state.CmdUpdateState("jumping", false);
+        }
 
         if (teleporting == true)
         {
@@ -157,7 +161,6 @@ public class PlayerControl : NetworkBehaviour {
         // Move Y rotation to root
         boi.rotation = Quaternion.Euler(0, trans.rotation.eulerAngles.y, 0);
 
-        state.CmdUpdateState("jumping", selfRigidbody.position.y > 1 ? true : false);
         state.CmdUpdateState("moving", translation.magnitude > 0 ? true : false);
 
         if (!teleportActive)
@@ -166,12 +169,14 @@ public class PlayerControl : NetworkBehaviour {
             {
                 CmdAttack();
                 swordAnim.SetTrigger("Hit");
+                state.CmdUpdateState("attacking", true);
             }
 
             if (Input.GetMouseButtonDown(1))
             {
                 CmdAttack();
                 swordAnim.SetTrigger("Hit");
+                state.CmdUpdateState("attacking", true);
             }
 
             if (Input.GetMouseButtonDown(2) && timeStamp <= Time.time && teleportTargeting && isGrounded)
@@ -248,6 +253,7 @@ public class PlayerControl : NetworkBehaviour {
         if (attackTimer > 0)
         {
             attackTimer -= Time.deltaTime;
+            state.CmdUpdateState("attacking", false);
 
             if (attackTimer <= 0)
             {
