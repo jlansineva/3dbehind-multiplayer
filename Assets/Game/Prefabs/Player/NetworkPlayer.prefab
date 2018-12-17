@@ -146,7 +146,6 @@ GameObject:
   - component: {fileID: 114277783587569068}
   - component: {fileID: 114882849962832440}
   - component: {fileID: 114378254965320900}
-  - component: {fileID: 95973838930594996}
   - component: {fileID: 114117689129992888}
   - component: {fileID: 114148345535704786}
   - component: {fileID: 54078000259483682}
@@ -913,24 +912,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!95 &95973838930594996
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1227197684362362}
-  m_Enabled: 0
-  m_Avatar: {fileID: 9000000, guid: 1016b9847b09cc3479557540dd9ebea5, type: 3}
-  m_Controller: {fileID: 9100000, guid: 5a83b8043e0a8a743ad636eb218c171e, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114117689129992888
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1025,7 +1006,7 @@ MonoBehaviour:
   teleportRange: 15
   teleportSpeed: 50
   trans: {fileID: 0}
-  anim: {fileID: 0}
+  swordAnim: {fileID: 0}
   targetingPrefab: {fileID: 1155622511169094, guid: a266e83aff2adf74fa7080b5ecfda495,
     type: 2}
   teleportParticlePrefab: {fileID: 1145632469793016, guid: b59b1b89331724c48acf1dbbda85d13e,

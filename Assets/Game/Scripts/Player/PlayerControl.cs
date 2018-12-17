@@ -15,7 +15,7 @@ public class PlayerControl : NetworkBehaviour {
     public int teleportRange = 15;
     public float teleportSpeed = 50f;
     public Transform trans;
-    public Animator anim;
+    public Animator swordAnim;
     public GameObject targetingPrefab;
     public GameObject teleportParticlePrefab;
     public GameObject bloodPrefab;
@@ -63,13 +63,14 @@ public class PlayerControl : NetworkBehaviour {
             camera.transform.localRotation = new Quaternion();
             trans = camera.transform;
 
+            swordAnim = trans.Find("Katana").GetComponent<Animator>();
+
             var characterRenderer = boi.transform.Find("Cube").GetComponent<Renderer>();
             characterRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
         }
 
         selfRigidbody = GetComponent<Rigidbody>();
 
-        anim = GetComponent<Animator>();
         playerCollider = GetComponent<Collider>();
         distToGround = playerCollider.bounds.extents.y;
     }
@@ -164,13 +165,13 @@ public class PlayerControl : NetworkBehaviour {
             if (Input.GetMouseButtonDown(0))
             {
                 CmdAttack();
-                anim.SetTrigger("Hit");
+                swordAnim.SetTrigger("Hit");
             }
 
             if (Input.GetMouseButtonDown(1))
             {
                 CmdAttack();
-                anim.SetTrigger("HitHorizontal");
+                swordAnim.SetTrigger("Hit");
             }
 
             if (Input.GetMouseButtonDown(2) && timeStamp <= Time.time && teleportTargeting && isGrounded)
