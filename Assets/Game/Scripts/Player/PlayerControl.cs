@@ -172,14 +172,8 @@ public class PlayerControl : NetworkBehaviour {
                 state.CmdUpdateState("attacking", true);
             }
 
-            if (Input.GetMouseButtonDown(1))
-            {
-                CmdAttack();
-                swordAnim.SetTrigger("Hit");
-                state.CmdUpdateState("attacking", true);
-            }
-
-            if (Input.GetMouseButtonDown(2) && timeStamp <= Time.time && teleportTargeting && isGrounded)
+            var mouseMiddleOrRight = Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2);
+            if (mouseMiddleOrRight && timeStamp <= Time.time && teleportTargeting && isGrounded)
             {
                 teleporting = true;
                 teleportTargeting = false;
