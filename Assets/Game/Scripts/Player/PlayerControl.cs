@@ -50,6 +50,9 @@ public class PlayerControl : NetworkBehaviour {
     private PlayerState state;
     private float teleportTimer = 0;
 
+    private ChatManager chat;
+    private string playerName;
+
     void Start()
     {
         state = GetComponent<PlayerState>();
@@ -69,6 +72,8 @@ public class PlayerControl : NetworkBehaviour {
             characterRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
         }
 
+        playerName = "Player" + netId.ToString();
+        chat = FindObjectOfType<ChatManager>();
         selfRigidbody = GetComponent<Rigidbody>();
 
         playerCollider = GetComponent<Collider>();
@@ -259,6 +264,7 @@ public class PlayerControl : NetworkBehaviour {
                 foreach (var player in otherPlayerWithinRange)
                 {
                     score += 1;
+                    chat.SendMessageToChat("+1 point for " + playerName, Message.MessageType.info);
                     player.RpcDead();
                 }
             }

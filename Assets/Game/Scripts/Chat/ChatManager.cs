@@ -38,15 +38,6 @@ public class ChatManager : MonoBehaviour  {
             if (!chatBox.isFocused && Input.GetKeyDown(KeyCode.Return))
                 chatBox.ActivateInputField();
         }
-
-        if (!chatBox.isFocused)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SendMessageToChat("Pressed space", Message.MessageType.info);
-                Debug.Log("Space");
-            }
-        }
 	}
 
     // Add new message to messageList. Remove oldest message if list is full
