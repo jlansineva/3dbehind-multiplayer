@@ -257,7 +257,7 @@ public class PlayerControl : NetworkBehaviour {
             if (attackTimer <= 0)
             {
                 var otherPlayers = GetOtherPlayers();
-                var impactPoint = attackDirection.origin + attackDirection.direction.normalized * 0.4f;
+                var impactPoint = transform.position + attackDirection.direction.normalized * 0.8f;
                 var otherPlayerWithinRange = otherPlayers
                     .Where(it => IsWithingRange(it.transform.position, impactPoint, 2.5f));
 
