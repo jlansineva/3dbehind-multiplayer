@@ -264,7 +264,7 @@ public class PlayerControl : NetworkBehaviour {
                 foreach (var player in otherPlayerWithinRange)
                 {
                     score += 1;
-                    chat.SendMessageToChat("+1 point for " + playerName, Message.MessageType.info);
+                    chat.SendMessageToChat("Winner: " + playerName + " (Total score " + score + " points)", Message.MessageType.info);
                     player.RpcDead();
                 }
             }
