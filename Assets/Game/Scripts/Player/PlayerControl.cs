@@ -74,6 +74,7 @@ public class PlayerControl : NetworkBehaviour {
 
         playerName = "Player" + netId.ToString();
         chat = FindObjectOfType<ChatManager>();
+        chat.username = playerName;
         selfRigidbody = GetComponent<Rigidbody>();
 
         playerCollider = GetComponent<Collider>();
