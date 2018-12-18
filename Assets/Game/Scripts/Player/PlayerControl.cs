@@ -156,6 +156,8 @@ public class PlayerControl : NetworkBehaviour {
 
         if (!isLocalPlayer) return;
 
+        chat.UpdateChatBox(SendMessageToChat);
+
         // Handle WASD movement
         float translationX = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         float translationY = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
@@ -252,7 +254,7 @@ public class PlayerControl : NetworkBehaviour {
     {
         if (attackTimer > 0)
         {
-            attackTimer -= Time.deltaTime;
+            attackTimer -= Time.deltaTime;  
             state.CmdUpdateState("attacking", false);
 
             if (attackTimer <= 0)
@@ -265,11 +267,22 @@ public class PlayerControl : NetworkBehaviour {
                 foreach (var player in otherPlayerWithinRange)
                 {
                     score += 1;
-                    chat.SendMessageToChat("Winner: " + playerName + " (Total score " + score + " points)", Message.MessageType.info);
+                    CmdSendMessageToChat("Winner: " + playerName + " (Total score " + score + " points)", Message.MessageType.info);
                     player.RpcDead();
                 }
             }
         }
+    }
+
+    private void SendMessageToChat(string text, Message.MessageType messageType)
+    {
+        CmdSendMessageToChat(text, messageType);
+    }
+
+    [Command]
+    private void CmdSendMessageToChat(string text, Message.MessageType messageType)
+    {
+        chat.RpcSendMessageToChat(text, messageType);
     }
 
     private bool IsWithingRange(Vector3 vec1, Vector3 vec2, float distance)

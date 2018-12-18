@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.Events;
 
-public class ChatManager : MonoBehaviour  {
+public class ChatManager : NetworkBehaviour
+{
 
     public string username;
 
@@ -18,18 +20,20 @@ public class ChatManager : MonoBehaviour  {
     [SerializeField]
     List<Message> messageList = new List<Message>();
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if(chatBox.text != "")
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    public void UpdateChatBox(UnityAction<string, Message.MessageType> sendMessage)
+    {
+        if (chatBox.text != "")
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                SendMessageToChat(username + ": " + chatBox.text, Message.MessageType.playerMessage);
+                sendMessage(username + ": " + chatBox.text, Message.MessageType.playerMessage);
                 chatBox.text = "";
             }
         }
@@ -38,17 +42,17 @@ public class ChatManager : MonoBehaviour  {
             if (!chatBox.isFocused && Input.GetKeyDown(KeyCode.Return))
                 chatBox.ActivateInputField();
         }
-	}
+    }
 
     // Add new message to messageList. Remove oldest message if list is full
-    public void SendMessageToChat(string text, Message.MessageType messageType)
+    [ClientRpc]
+    public void RpcSendMessageToChat(string text, Message.MessageType messageType)
     {
         if (messageList.Count >= maxMessages)
         {
             Destroy(messageList[0].textObject.gameObject);
             messageList.Remove(messageList[0]);
         }
-            
 
         Message newMessage = new Message();
 
@@ -68,7 +72,7 @@ public class ChatManager : MonoBehaviour  {
     {
         Color color = info;
 
-        switch(messageType)
+        switch (messageType)
         {
             case Message.MessageType.playerMessage:
                 color = playerMessage;
