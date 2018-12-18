@@ -13,6 +13,9 @@ public class PlayerState : NetworkBehaviour {
     [SyncVar]
     [SerializeField]
     private bool teleporting = false;
+    [SyncVar]
+    [SerializeField]
+    private bool attacking = false;
 
     [Command]
     public void CmdUpdateState(string stateVar, bool newValue)
@@ -27,6 +30,9 @@ public class PlayerState : NetworkBehaviour {
                 break;
             case "moving":
                 moving = newValue;
+                break;
+            case "attacking":
+                attacking = newValue;
                 break;
             default:
                 break;
@@ -43,6 +49,8 @@ public class PlayerState : NetworkBehaviour {
                 return teleporting;
             case "moving":
                 return moving;
+            case "attacking":
+                return attacking;
             default:
                 return false;
         }
